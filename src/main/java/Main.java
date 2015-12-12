@@ -17,7 +17,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        final String downloadDestination = "C:\\Users\\atony_000\\Documents\\XKCD\\";
+        final String downloadDestination = "Your-Download-Path-Here";
 
 
         int number;
