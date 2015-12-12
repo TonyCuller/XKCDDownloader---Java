@@ -17,7 +17,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        final String downloadDestination = "YOUR-DOWNLOAD-PATH-HERE";
+        final String downloadDestination = "Your-Download-Path-Here";
 
 
         int number;
@@ -28,26 +28,29 @@ public class Main {
 
         number = data.getNum();
 
+
+        if (!new File(downloadDestination + data.getYear()).exists()) {
+            new File(downloadDestination + data.getYear()).mkdirs();
+        }
+
         //Download latest XKCD to Folder already set up
         try (InputStream in = new URL(data.getImg()).openStream()) {
-            Files.copy(in, Paths.get(downloadDestination + data.getSafe_title() + ".png"));
+            if (!new File(downloadDestination + data.getYear() + "\\" + data.getSafe_title() + ".png").exists()) {
+                Files.copy(in, Paths.get(downloadDestination + data.getYear() + "\\" + data.getSafe_title() + ".png"));
+            }
+
         }
 
         //Download the rest using a loop
         for (int i = number - 1; i > 0; i--) {
 
             //Skip 1608 because the img points to nowhere
-            if(i == 1608) {
+            if (i == 1608) {
                 i = 1607;
             }
 
-            //Skip 786 until I figure out what I want to do with comics that are named the same
-            else if(i == 786) {
-                i = 785;
-            }
-
             //Very funny...
-            else if(i == 404){
+            else if (i == 404) {
                 i = 403;
             }
 
@@ -56,14 +59,18 @@ public class Main {
 
             title = title.replaceAll("[^A-Za-z0-9()'\\- ]", " "); //Use Regex to format title
 
+            if (!new File(downloadDestination + data.getYear()).exists()) {
+                new File(downloadDestination + data.getYear()).mkdirs();
+            }
 
-                if(new File(downloadDestination + title + ".png").exists()){ //Make sure it doesn't download the same thing twice
-                    continue;
-                }
 
-                try (InputStream in = new URL(data.getImg()).openStream()) {
-                    Files.copy(in, Paths.get(downloadDestination + title + ".png"));
-                }
+            if (new File(downloadDestination + data.getYear() + "\\" + title + ".png").exists()) { //Make sure it doesn't download the same thing twice
+                continue;
+            }
+
+            try (InputStream in = new URL(data.getImg()).openStream()) {
+                Files.copy(in, Paths.get(downloadDestination + data.getYear() + "\\" + title + ".png"));
+            }
 
 
         }
